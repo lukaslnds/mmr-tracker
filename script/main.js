@@ -582,6 +582,62 @@ function ResetTracker() {
 }
 
 
+/* Keep every HUD tracker row centered and scaled to the actual panel width.
+   This fixes clipping on both desktop and phones without changing the
+   underlying item layout or tracker logic. */
+function fitHudTrackers() {
+    var panels = document.querySelectorAll('.hud-panel');
+    panels.forEach(function(panel) {
+        var available = Math.max(80, panel.clientWidth - 10);
+        var rows = panel.querySelectorAll('.hud-item-row');
+
+        rows.forEach(function(row) {
+            row.style.display = 'flex';
+            row.style.justifyContent = 'center';
+            row.style.alignItems = 'flex-start';
+            row.style.width = '100%';
+            row.style.overflow = 'visible';
+
+            var tracker = row.querySelector('.tracker');
+            if (!tracker) return;
+
+            // Measure at natural size first.
+            tracker.style.transform = 'none';
+            tracker.style.marginLeft = 'auto';
+            tracker.style.marginRight = 'auto';
+            tracker.style.marginBottom = '0';
+
+            var naturalWidth = tracker.offsetWidth;
+            if (!naturalWidth) return;
+
+            // Leave a small safety margin so the last icon can never be clipped.
+            var scale = Math.min(1, available / naturalWidth);
+            scale = Math.max(0.34, scale);
+
+            tracker.style.transformOrigin = 'top center';
+            tracker.style.transform = 'scale(' + scale + ')';
+
+            // Transforms do not affect layout height; compensate so successive
+            // rows stay compact while the whole visual group remains visible.
+            var naturalHeight = tracker.offsetHeight || 64;
+            row.style.height = Math.max(28, Math.round(naturalHeight * scale)) + 'px';
+        });
+    });
+}
+
+function installHudResizeObserver() {
+    if (typeof ResizeObserver === 'undefined') return;
+    var itemdiv = document.getElementById('itemdiv');
+    if (!itemdiv) return;
+    if (itemdiv._hudResizeObserver) return;
+
+    var observer = new ResizeObserver(function() {
+        window.requestAnimationFrame(fitHudTrackers);
+    });
+    observer.observe(itemdiv);
+    itemdiv._hudResizeObserver = observer;
+}
+
 function getHudPanel(rowIndex) {
     var sender = document.getElementById('itemdiv');
     var panels = sender.querySelectorAll('.hud-panel');
@@ -610,6 +666,7 @@ function getHudPanel(rowIndex) {
     else if (rowIndex >= 5 && rowIndex <= 6) panelIndex = 2;
     else if (rowIndex >= 7 && rowIndex <= 10) panelIndex = 3;
     else panelIndex = 5;
+    installHudResizeObserver();
     return panels[panelIndex];
 }
 
@@ -646,6 +703,7 @@ function addItemRow() {
     itemGrid[r]['row'].appendChild(itemGrid[r]['removebutton']);
 
     saveCookie();
+    window.requestAnimationFrame(fitHudTrackers);
 }
 
 
@@ -658,6 +716,7 @@ function removeItemRow() {
     itemLayout.splice(r, 1);
 
     saveCookie();
+    window.requestAnimationFrame(fitHudTrackers);
 }
 
 
@@ -705,6 +764,7 @@ function addItem(r) {
 
     updateGridItem(r, i);
     saveCookie();
+    window.requestAnimationFrame(fitHudTrackers);
 }
 function removeItem(r) {
     var i = itemLayout[r].length - 1
@@ -807,6 +867,14 @@ function initGridRow(itemsets) {
         }
     }
 }
+
+window.addEventListener('resize', function() {
+    window.requestAnimationFrame(fitHudTrackers);
+});
+
+window.addEventListener('orientationchange', function() {
+    window.setTimeout(fitHudTrackers, 100);
+});
 
 function setMOver(row, col,corner) {
     //keep track of what item you moused over.

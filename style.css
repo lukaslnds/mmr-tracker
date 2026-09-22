@@ -901,3 +901,34 @@ body > footer {
         max-height: calc(100vh - 49vh - 65px) !important;
     }
 }
+
+/* =========================================================
+   Final HUD fix — fit and center every tracker group
+   The item tables have variable numbers of 2x2 slots. A fixed
+   scale caused the rightmost slots to be clipped on both PC
+   and phones. main.js now computes the correct scale per row.
+   ========================================================= */
+.hud-item-row {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hud-panel .tracker {
+    transform-origin: top center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 0 !important;
+}
+
+/* Keep the old responsive rules from forcing a too-large scale. */
+@media (min-width: 1250px) {
+    .hud-panel .tracker { transform-origin: top center !important; }
+}
+@media (max-width: 900px) and (pointer: coarse) {
+    .hud-panel .tracker { transform-origin: top center !important; }
+}
