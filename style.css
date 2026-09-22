@@ -747,3 +747,157 @@ body > footer {
     .mapspan .tooltip,
     .mapspan .tooltipgray { display: none !important; visibility: hidden !important; }
 }
+/* =========================================================
+   MMR Tracker V2 — iPhone HUD layout fix
+   - Portrait: 2 panels per row
+   - Landscape: 3 panels per row
+   - No horizontal inventory clipping
+   - Tracker logic/layout is untouched
+   ========================================================= */
+
+@media (max-width: 900px) and (pointer: coarse) {
+    /* Let the HUD itself scroll vertically when needed. */
+    html, body {
+        overflow: hidden !important;
+        width: 100%;
+        min-width: 0;
+    }
+
+    #layoutdiv {
+        width: 100vw !important;
+        height: 100vh !important;
+        padding-bottom: 46vh !important;
+        overflow: hidden !important;
+    }
+
+    /* Keep the map centered and never let it create horizontal overflow. */
+    #mapdiv {
+        max-width: none !important;
+        flex: 0 0 auto !important;
+        margin: auto !important;
+        zoom: min(1, calc((100vw - 8px) / 825), calc((54vh - 8px) / 466)) !important;
+    }
+
+    #itemdiv {
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        height: 46vh !important;
+        padding: 7px !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-rows: minmax(145px, 1fr) !important;
+        gap: 7px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        align-content: start !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .hud-panel {
+        min-width: 0 !important;
+        width: 100% !important;
+        min-height: 145px !important;
+        height: auto !important;
+        padding: 32px 2px 3px !important;
+        overflow: hidden !important;
+    }
+
+    .hud-panel::before {
+        height: 29px !important;
+        font-size: 12px !important;
+        padding: 0 3px !important;
+    }
+
+    /* Six 64px cells become ~184px wide at this scale, fitting a phone column. */
+    .hud-panel .tracker {
+        transform: scale(.48) !important;
+        transform-origin: top center !important;
+        margin: 0 auto -33px !important;
+    }
+
+    .hud-panel .tracker td {
+        width: 64px !important;
+        height: 64px !important;
+    }
+
+    #settingsbutton {
+        right: 7px !important;
+        bottom: calc(46vh + 7px) !important;
+    }
+
+    .settings {
+        left: 7px !important;
+        right: 7px !important;
+        bottom: calc(46vh + 52px) !important;
+        max-height: calc(100vh - 46vh - 65px) !important;
+    }
+}
+
+/* Portrait: 2 columns × 3 rows. */
+@media (max-width: 900px) and (pointer: coarse) and (orientation: portrait) {
+    #layoutdiv {
+        padding-bottom: 62vh !important;
+    }
+
+    #itemdiv {
+        height: 62vh !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-rows: minmax(150px, 1fr) !important;
+    }
+
+    .hud-panel {
+        min-height: 150px !important;
+    }
+
+    #settingsbutton {
+        bottom: calc(62vh + 7px) !important;
+    }
+
+    .settings {
+        bottom: calc(62vh + 52px) !important;
+        max-height: calc(100vh - 62vh - 65px) !important;
+    }
+}
+
+/* Landscape: 3 columns × 2 rows so all six categories fit at once. */
+@media (max-width: 900px) and (pointer: coarse) and (orientation: landscape) {
+    #layoutdiv {
+        padding-bottom: 49vh !important;
+    }
+
+    #mapdiv {
+        zoom: min(1, calc((100vw - 8px) / 825), calc((51vh - 8px) / 466)) !important;
+    }
+
+    #itemdiv {
+        height: 49vh !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-rows: auto !important;
+        overflow-y: auto !important;
+    }
+
+    .hud-panel {
+        min-height: 0 !important;
+        height: 100% !important;
+        padding-top: 30px !important;
+    }
+
+    .hud-panel .tracker {
+        transform: scale(.64) !important;
+        margin: 0 auto -23px !important;
+    }
+
+    #settingsbutton {
+        bottom: calc(49vh + 7px) !important;
+    }
+
+    .settings {
+        bottom: calc(49vh + 52px) !important;
+        max-height: calc(100vh - 49vh - 65px) !important;
+    }
+}
