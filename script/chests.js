@@ -413,8 +413,9 @@ var dungeons = [
     },
     {
         name: "Woodfall Temple",
-        x: "14.5%",
-        y: "15.0%",
+        // Position aligned to the watercolor Termina map: Woodfall's central temple.
+        x: "51.5%",
+        y: "67.0%",
         chestlist: {
             'Bow Chest': { isAvailable: function () { return canAccessWoodFall() && items.Deku && canPlay(items.Sonata); }, },
             'Compass Chest': { isAvailable: function () { return canAccessWoodFall() && items.Deku && canPlay(items.Sonata); }, },
@@ -439,8 +440,10 @@ var dungeons = [
     },
     {
         name: "Stone Tower Temple",
-        x: "14.5%",
-        y: "42.0%",
+        // STONE TOWER TEMPLE — the dungeon entrance is at the top of Stone Tower,
+        // in the northeastern part of Ikana Canyon on this watercolor Termina map.
+        x: "88.0%",
+        y: "40.0%",
         chestlist: {
             'Map Chest': { isAvailable: function () {
                 return canAccessStoneTower() && (items.Goron && (items.shield >=2 || items.Light && items.Bow && items.Magic) || items.Zora && items.Light && items.Bow && items.Magic); }, },
@@ -472,8 +475,9 @@ var dungeons = [
     },
     {
         name: "Snowhead Temple",
-        x: "23.3%",
-        y: "29.0%",
+        // Snowhead Temple sits in the northernmost snowy mountain area.
+        x: "50.0%",
+        y: "17.0%",
         chestlist: {
             'Bridge Room Chest': { isAvailable: function () {
                 return canAccessSnowhead(); }, },
@@ -501,8 +505,9 @@ var dungeons = [
     },
     {
         name: "Great Bay Temple",
-        x: "05.5%",
-        y: "29.0%",
+        // Great Bay Temple is offshore in the western ocean.
+        x: "20.0%",
+        y: "59.0%",
         chestlist: {
             'Map Chest': { isAvailable: function () {
                 return canAccessGBT(); }, },
@@ -1097,8 +1102,10 @@ var dungeons = [
     },   
     {
         name: "Stone Tower",
-        x: "82.0%",
-        y: "38.5%",
+        // Exterior tower landmark; the dungeon above it is the separate
+        // "Stone Tower Temple" entry above.
+        x: "88.0%",
+        y: "28.0%",
         chestlist: {
             'Inverted Stone Tower Left Chest': { isAvailable: function () {
                 return canAccessStoneTower() && items.Light && items.Bow && items.Magic && canPlay(items.Elegy) && ((items.Beans && items.Bottle) || canHover()); }, },
